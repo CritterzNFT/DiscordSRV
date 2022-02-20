@@ -23,6 +23,7 @@
 package github.scarsz.discordsrv;
 
 import alexh.weak.Dynamic;
+import com.github.puregero.multilib.MultiLib;
 import com.google.common.collect.ImmutableList;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import com.google.gson.Gson;
@@ -1785,7 +1786,7 @@ public class DiscordSRV extends JavaPlugin {
         if (chatHook == null || channel == null) {
             if (channel != null && !channel.equalsIgnoreCase("global")) return; // don't send messages for non-global channels with no plugin hooks
             DiscordGuildMessagePreBroadcastEvent preBroadcastEvent = api.callEvent(new DiscordGuildMessagePreBroadcastEvent
-                    (channel, message, PlayerUtil.getOnlinePlayers()));
+                    (channel, message, PlayerUtil.getOnlinePlayers().stream().filter(MultiLib::isLocalPlayer).collect(Collectors.toList())));
             message = preBroadcastEvent.getMessage();
             channel = preBroadcastEvent.getChannel();
             MessageUtil.sendMessage(preBroadcastEvent.getRecipients(), message);
